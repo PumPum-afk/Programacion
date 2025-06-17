@@ -1,0 +1,222 @@
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import java.util.Random;
+
+public class Aplicacion {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int opcion = -1;
+
+        do {
+            System.out.println("\n=== MENÚ PRINCIPAL ===");
+            System.out.println("1. Verificar si es mayor de edad");
+            System.out.println("2. Tirar un dado");
+            System.out.println("3. Semáforo");
+            System.out.println("4. Calcular propina según el día");
+            System.out.println("5. Verificar si un número es par o impar");
+            System.out.println("6. Conversor Celsius a Fahrenheit");
+            System.out.println("7. Planificador de cultivos");
+            System.out.println("8. Fantasmómetro");
+            System.out.println("9. Validar contraseña");
+            System.out.println("10. Red energética");
+            System.out.println("11. Rango competitivo");
+            System.out.println("0. Salir");
+            System.out.print("Selecciona una opción: ");
+
+            if (scanner.hasNextInt()) {
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Limpiar buffer
+            } else {
+                System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                scanner.nextLine();
+                continue;
+            }
+
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingrese el nombre: ");
+                    String nombre = scanner.nextLine();
+                    System.out.print("Ingrese la edad: ");
+                    if (scanner.hasNextInt()) {
+                        int edad = scanner.nextInt();
+                        scanner.nextLine();
+                        Persona persona = new Persona(nombre, edad);
+                        persona.mostrarDatos();
+                    } else {
+                        System.out.println("Edad no válida.");
+                        scanner.nextLine();
+                    }
+                    break;
+
+                case 2:
+                    Random random = new Random();
+                    System.out.println("Resultado del dado: " + (random.nextInt(6) + 1));
+                    break;
+
+                case 3:
+                    System.out.print("Color del semáforo: ");
+                    String color = scanner.nextLine();
+                    Semaforo semaforo = new Semaforo(color);
+                    System.out.println("Acción: " + semaforo.accion());
+                    break;
+
+                case 4:
+                    String[] dias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
+                    for (String dia : dias) {
+                        System.out.println("\n=== Día: " + dia + " ===");
+                        Cuenta cuenta;
+                        switch (dia) {
+                            case "Lunes": cuenta = new Cuenta(100, 10); break;
+                            case "Martes": cuenta = new Cuenta(150, 12); break;
+                            case "Miércoles": cuenta = new Cuenta(200, 15); break;
+                            case "Jueves": cuenta = new Cuenta(250, 18); break;
+                            case "Viernes": cuenta = new Cuenta(300, 20); break;
+                            case "Sábado": cuenta = new Cuenta(400, 22); break;
+                            case "Domingo": cuenta = new Cuenta(500, 25); break;
+                            default: cuenta = new Cuenta(0, 0);
+                        }
+                        System.out.println("Total venta: $" + cuenta.getTotalVenta());
+                        System.out.println("Propina: " + cuenta.getPorcentajePropina() + "%");
+                        System.out.println("Total con propina: $" + cuenta.calcularTotalConPropina());
+                    }
+                    break;
+
+                case 5:
+                    System.out.print("Ingresa un número entero: ");
+                    if (scanner.hasNextInt()) {
+                        int numero = scanner.nextInt();
+                        scanner.nextLine();
+                        Numero miNumero = new Numero(numero);
+                        System.out.println("El número " + numero + " es " + (miNumero.esPar() ? "par." : "impar."));
+                    } else {
+                        System.out.println("Número no válido.");
+                        scanner.nextLine();
+                    }
+                    break;
+
+                case 6:
+                    System.out.print("Introduce grados Celsius: ");
+                    if (scanner.hasNextDouble()) {
+                        double celsius = scanner.nextDouble();
+                        scanner.nextLine();
+                        Conversor conv = new Conversor();
+                        System.out.println(celsius + " °C son " + conv.celsiusAFahrenheit(celsius) + " °F");
+                    } else {
+                        System.out.println("Temperatura no válida.");
+                        scanner.nextLine();
+                    }
+                    break;
+
+                case 7:
+                    System.out.print("Cultivo (trigo, maíz, soja): ");
+                    String cultivo = scanner.nextLine();
+                    System.out.print("Estación (primavera, verano, otoño): ");
+                    String estacion = scanner.nextLine();
+                    Planificador planificador = new Planificador(cultivo, estacion);
+                    System.out.println(planificador.puedePlantar()
+                            ? "Puedes plantar " + cultivo + " en " + estacion
+                            : "No es recomendable plantar " + cultivo + " en " + estacion);
+                    break;
+
+                case 8:
+                    System.out.print("Temperatura: ");
+                    double temp = scanner.nextDouble();
+                    System.out.print("¿Hay escritura? (true/false): ");
+                    boolean escritura = scanner.nextBoolean();
+                    scanner.nextLine();
+                    Fantasmometro f = new Fantasmometro(temp, escritura);
+                    System.out.println("Resultado: " + f.determinarFantasma());
+                    break;
+
+                case 9:
+                    ValidadorContrasena validador = new ValidadorContrasena();
+                    String[] contrasenas = {"password", "Password1", "claveSegura", "abc123", "Segura123"};
+                    for (String c : contrasenas) {
+                        boolean segura = validador.esSegura(c);
+                        System.out.println("Contraseña: " + c + " → " + (segura ? "SEGURA" : "NO SEGURA"));
+                    }
+                    break;
+
+                case 10:
+                    RedEnergetica[] redes = {
+                        new RedEnergetica(5000, 4500),
+                        new RedEnergetica(3000, 4000),
+                        new RedEnergetica(6000, 6000)
+                    };
+                    for (RedEnergetica red : redes) {
+                        System.out.println("Generación: " + red.calcularGeneracion() + " kW");
+                        System.out.println("Consumo: " + red.calcularConsumo() + " kW");
+                        System.out.println(red.estadoRed());
+                        System.out.println("------------------------");
+                    }
+                    break;
+
+                case 11:
+                    RangoCompetitivo rango = new RangoCompetitivo();
+                    int[] puntuaciones = {500, 1500, 2500, 3500, -100};
+                    for (int p : puntuaciones) {
+                        System.out.println("Puntuación: " + p + " → Rango: " + rango.determinarRango(p));
+                    }
+                    break;
+
+                case 0:
+                    System.out.println("Saliendo del programa...");
+                    break;
+
+                default:
+                    System.out.println("Opción no válida.");
+            }
+
+        } while (opcion != 0);
+
+        scanner.close();
+    }
+}
+
+// ==== CLASES USADAS EN EL MENÚ ====
+class Persona {
+    private String nombre;
+    private int edad;
+
+    public Persona(String nombre, int edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+
+    public boolean esMayorDeEdad() {
+        return edad >= 18;
+    }
+
+    public void mostrarDatos() {
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Edad: " + edad);
+        System.out.println("¿Mayor de edad?: " + (esMayorDeEdad() ? "Sí" : "No"));
+    }
+}
+
+class Semaforo {
+    private String color;
+
+    public Semaforo(String color) {
+        this.color = color.toLowerCase();
+    }
+
+    public String accion() {
+        switch (color) {
+            case "verde": return "Avanzar";
+            case "amarillo": return "Esperar";
+            case "rojo": return "Detenerse";
+            default: return "Color no válido";
+        }
+    }
+}
+
+class Cuenta {
+    private double totalVenta;
+    private double porcentajePropina;
+
+    public Cuenta(double totalVenta, double porcentajePropina)
+    
+   }
+}
